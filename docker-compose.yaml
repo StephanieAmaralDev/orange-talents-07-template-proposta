@@ -41,7 +41,7 @@ services:
     ports:
         - 5434:5432 #porta_maquina_host:porta_do_container_do_docker
     environment:
-      #POSTGRES_USER: root
+      #POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: propostas
 
