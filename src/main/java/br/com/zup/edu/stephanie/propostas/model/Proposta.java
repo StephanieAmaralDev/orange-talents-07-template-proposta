@@ -1,5 +1,6 @@
 package br.com.zup.edu.stephanie.propostas.model;
 
+import br.com.zup.edu.stephanie.propostas.request.SolicitarAnaliseRequest;
 import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
@@ -74,4 +75,10 @@ public class Proposta {
     public BigDecimal getSalario() {
         return salario;
     }
+
+    public SolicitarAnaliseRequest analisarSolicitante(){
+        return new SolicitarAnaliseRequest(documento, nome, id.toString());
+    }
+
+
 }

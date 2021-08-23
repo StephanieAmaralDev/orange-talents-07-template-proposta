@@ -1,6 +1,7 @@
 package br.com.zup.edu.stephanie.propostas.request;
 
 import br.com.zup.edu.stephanie.propostas.model.Proposta;
+import br.com.zup.edu.stephanie.propostas.validation.CPFCNPJValid;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 
 public class PropostaRequest {
 
+    @CPFCNPJValid
     @NotBlank
     private String documento;
 
