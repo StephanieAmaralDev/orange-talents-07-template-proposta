@@ -1,12 +1,11 @@
 package br.com.zup.edu.stephanie.propostas.model;
 
+import br.com.zup.edu.stephanie.propostas.enums.StatusAnalise;
+import br.com.zup.edu.stephanie.propostas.enums.StatusProposta;
 import br.com.zup.edu.stephanie.propostas.request.SolicitarAnaliseRequest;
 import org.springframework.util.Assert;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -19,6 +18,10 @@ public class Proposta {
 
     @NotBlank
     private String documento;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private StatusProposta statusProposta;
 
     @NotEmpty
     @Email
@@ -45,6 +48,7 @@ public class Proposta {
         Assert.hasLength(endereco, "O endereço deve ser preenchido");
         Assert.notNull(salario, "O valor do salário deve ser preenchido");
 
+        this.statusProposta = StatusProposta.NAO_ELEGIVEL;
         this.documento = documento;
         this.email = email;
         this.nome = nome;
@@ -80,5 +84,8 @@ public class Proposta {
         return new SolicitarAnaliseRequest(documento, nome, id.toString());
     }
 
+    public void atualizarStatus(StatusAnalise status) {
+        this.statusProposta = status.toProposta();
+    }
 
 }

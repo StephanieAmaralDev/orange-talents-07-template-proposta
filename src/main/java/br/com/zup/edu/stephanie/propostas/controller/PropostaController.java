@@ -9,11 +9,7 @@ import br.com.zup.edu.stephanie.propostas.validation.ApiErroException;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -45,6 +41,7 @@ public class PropostaController {
 
         try {
             SolicitarAnaliseResponse analise = analiseSolicitanteService.solicitarAnalise(proposta.analisarSolicitante());
+            proposta.atualizarStatus(analise.getResultadoSolicitacao());
             propostaRepository.save(proposta);
         }
         catch (FeignException e) {
