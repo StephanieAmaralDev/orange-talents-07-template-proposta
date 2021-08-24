@@ -45,6 +45,18 @@ services:
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: propostas
 
+  proposta-webservice:
+    container_name: api
+    build: ./
+    ports:
+       - 8081:8080
+    environment:
+      URL_DATABASE: jdbc:postgresql://postgres-proposta:5434/proposta
+      DB_USER: postgres
+      DB_PASSWORD: 123
+    depends_on:
+       - postgres-propostas
+
   keycloak:
     image: jboss/keycloak:11.0.0
     ports:
