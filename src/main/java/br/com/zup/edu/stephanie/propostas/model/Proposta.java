@@ -37,6 +37,8 @@ public class Proposta {
     @Positive
     private BigDecimal salario;
 
+    private String numeroCartao;
+
     public Proposta() {
     }
 
@@ -86,6 +88,10 @@ public class Proposta {
 
     public void atualizarStatus(StatusAnalise status) {
         this.statusProposta = status.toProposta();
+    }
+
+    public void associarCartao(String numeroCartao) {
+        this.numeroCartao = numeroCartao;
     }
 
 }
