@@ -19,47 +19,50 @@ public class Proposta {
     @NotBlank
     private String documento;
 
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String nome;
+
+    @NotBlank
+    private String endereco;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private StatusProposta statusProposta;
 
-    @NotEmpty
-    @Email
-    private String email;
-
-    @NotEmpty
-    private String nome;
-
-    @NotEmpty
-    private String endereco;
-
     @NotNull
-    @Positive
     private BigDecimal salario;
 
-    private String numeroCartao;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cartao_id")
+    private Cartao cartao;
 
-    public Proposta() {
-    }
+    private Proposta() {}
 
     @Valid
-    public Proposta(@NotBlank String documento, @NotBlank String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
-        Assert.hasLength(documento, "O número do documento deve ser preenchido");
+    public Proposta(String documento, @NotBlank String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @Positive BigDecimal salario) {
+        Assert.notNull(documento, "O número do documento deve ser preenchido");
         Assert.hasLength(email, "O e-mail deve ser preenchido");
         Assert.hasLength(nome, "O nome deve ser preenchido");
         Assert.hasLength(endereco, "O endereço deve ser preenchido");
         Assert.notNull(salario, "O valor do salário deve ser preenchido");
 
-        this.statusProposta = StatusProposta.NAO_ELEGIVEL;
         this.documento = documento;
         this.email = email;
         this.nome = nome;
         this.endereco = endereco;
         this.salario = salario;
+        this.statusProposta = StatusProposta.NAO_ELEGIVEL;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public StatusProposta getStatusProposta() {
+        return statusProposta;
     }
 
     public String getDocumento() {
@@ -82,16 +85,19 @@ public class Proposta {
         return salario;
     }
 
-    public SolicitarAnaliseRequest analisarSolicitante(){
-        return new SolicitarAnaliseRequest(documento, nome, id.toString());
+    public Cartao getCartao() {
+        return cartao;
     }
 
     public void atualizarStatus(StatusAnalise status) {
         this.statusProposta = status.toProposta();
     }
 
-    public void associarCartao(String numeroCartao) {
-        this.numeroCartao = numeroCartao;
+    public SolicitarAnaliseRequest analisarSolicitante(){
+        return new SolicitarAnaliseRequest(documento, nome, id.toString());
     }
 
+    public void atrelaCartao(Cartao cartao) {
+        this.cartao = cartao;
+    }
 }
