@@ -76,7 +76,7 @@
         <!--  <dependency>
              <groupId>io.micrometer</groupId>
              <artifactId>micrometer-registry-prometheus</artifactId>
-         </dependency>
+         </dependency>-->
 
         <dependency>
              <groupId>org.springframework.boot</groupId>
@@ -85,7 +85,7 @@
          <dependency>
              <groupId>org.springframework.security</groupId>
              <artifactId>spring-security-oauth2-jose</artifactId>
-         </dependency>-->
+         </dependency>
     </dependencies>
     <build>
         <plugins>
