@@ -6,6 +6,7 @@ import br.com.zup.edu.stephanie.propostas.request.PropostaRequest;
 import br.com.zup.edu.stephanie.propostas.response.PropostaResponse;
 import br.com.zup.edu.stephanie.propostas.response.SolicitarAnaliseResponse;
 import br.com.zup.edu.stephanie.propostas.service.AnaliseSolicitanteService;
+import br.com.zup.edu.stephanie.propostas.service.Metrica;
 import br.com.zup.edu.stephanie.propostas.validation.ApiErroException;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,9 @@ public class PropostaController {
 
     private final AnaliseSolicitanteService analiseSolicitanteService;
     private final PropostaRepository propostaRepository;
+    private Metrica metricas;
 
-    public PropostaController(PropostaRepository propostaRepository, AnaliseSolicitanteService analiseSolicitanteService) {
+    public PropostaController(PropostaRepository propostaRepository, Metrica metricas, AnaliseSolicitanteService analiseSolicitanteService) {
         this.propostaRepository = propostaRepository;
         this.analiseSolicitanteService = analiseSolicitanteService;
     }
