@@ -1,5 +1,6 @@
 package br.com.zup.edu.stephanie.propostas.request;
 
+import br.com.zup.edu.stephanie.propostas.model.DocumentoLimpo;
 import br.com.zup.edu.stephanie.propostas.model.Proposta;
 import br.com.zup.edu.stephanie.propostas.validation.CPFCNPJValid;
 
@@ -50,6 +51,6 @@ public class PropostaRequest {
     }
 
     public Proposta toModel() {
-        return new Proposta(documento, email, nome, endereco, salario);
+        return new Proposta(new DocumentoLimpo(documento), email, nome, endereco, salario);
     }
 }
