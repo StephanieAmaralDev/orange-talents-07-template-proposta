@@ -4,6 +4,7 @@ import br.com.zup.edu.stephanie.propostas.model.Biometria;
 import br.com.zup.edu.stephanie.propostas.repository.BiometriaRepository;
 import br.com.zup.edu.stephanie.propostas.repository.CartaoRepository;
 import br.com.zup.edu.stephanie.propostas.request.BiometriaRequest;
+import br.com.zup.edu.stephanie.propostas.service.Metrica;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -19,11 +20,13 @@ public class BiometriaController {
 
         private final BiometriaRepository biometriaRepository;
         private final CartaoRepository cartaoRepository;
+        private final Metrica metricas;
 
 
-        public BiometriaController(BiometriaRepository biometriaRepository, CartaoRepository cartaoRepository) {
+        public BiometriaController(BiometriaRepository biometriaRepository, CartaoRepository cartaoRepository, Metrica metricas) {
             this.biometriaRepository = biometriaRepository;
             this.cartaoRepository = cartaoRepository;
+            this.metricas = metricas;
 
         }
 
@@ -39,6 +42,7 @@ public class BiometriaController {
 
             Biometria biometria = biometriaObj.get();
             biometriaRepository.save(biometria);
+            metricas.incrementarBiometrias();
 
             URI uri = uriBuilder.path("/biometria/{id}").buildAndExpand(biometria.getId()).toUri();
             return ResponseEntity.created(uri).build();

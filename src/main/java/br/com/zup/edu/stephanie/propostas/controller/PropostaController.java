@@ -41,6 +41,7 @@ public class PropostaController {
         Proposta proposta = request.toModel();
 
         propostaRepository.save(proposta);
+        metricas.incrementarPropostas();
 
         try {
             SolicitarAnaliseResponse analise = analiseSolicitanteService.solicitarAnalise(proposta.analisarSolicitante());

@@ -9,6 +9,7 @@ import br.com.zup.edu.stephanie.propostas.request.BloquearCartaoRequest;
 import br.com.zup.edu.stephanie.propostas.request.ErrorFormatDTO;
 import br.com.zup.edu.stephanie.propostas.response.BloquearCartaoResponse;
 import br.com.zup.edu.stephanie.propostas.service.ConsultarCartaoService;
+import br.com.zup.edu.stephanie.propostas.service.Metrica;
 import br.com.zup.edu.stephanie.propostas.validation.ApiErroException;
 import feign.FeignException;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +23,17 @@ import java.util.Optional;
 @RestController
 public class BloqueioCartaoController {
 
+    private final Metrica metricas;
     private final CartaoRepository cartaoRepository;
     private final ConsultarCartaoService consultarCartaoService;
     private  final CartaoBloqueiaRepository cartaoBloqueiaRepository;
 
 
-    public BloqueioCartaoController(CartaoBloqueiaRepository cartaoBloqueiaRepository, ConsultarCartaoService consultarCartaoService, CartaoRepository cartaoRepository) {
+    public BloqueioCartaoController(CartaoBloqueiaRepository cartaoBloqueiaRepository, Metrica metricas, ConsultarCartaoService consultarCartaoService, CartaoRepository cartaoRepository) {
         this.cartaoBloqueiaRepository = cartaoBloqueiaRepository;
         this.consultarCartaoService = consultarCartaoService;
         this.cartaoRepository = cartaoRepository;
+        this.metricas = metricas;
 
     }
 
@@ -53,6 +56,7 @@ public class BloqueioCartaoController {
             if(verificarBloqueio(bloqueioResponse)){
                 BloqueioCartao bloqueio = bloqueioResponse.toModel(userAgent, ipCliente, cartaoBanco.get());
                 cartaoBloqueiaRepository.save(bloqueio);
+                metricas.incrementarBloqueiosRealizados();
             }
             else
                 throw new ApiErroException(422, "Não foi possível realizar bloqueio", "request");

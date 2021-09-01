@@ -9,6 +9,7 @@ import br.com.zup.edu.stephanie.propostas.request.CarteiraPagamentoRequest;
 import br.com.zup.edu.stephanie.propostas.request.ErrorFormatDTO;
 import br.com.zup.edu.stephanie.propostas.response.CarteiraPagamentoResponse;
 import br.com.zup.edu.stephanie.propostas.service.ConsultarCartaoService;
+import br.com.zup.edu.stephanie.propostas.service.Metrica;
 import feign.FeignException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +23,16 @@ import java.util.Optional;
 @RequestMapping("/carteiras")
 public class CarteiraController {
 
+    private final Metrica metricas;
     private final CartaoRepository cartaoRepository;
     private final ConsultarCartaoService consultarCartaoService;
     private final CarteiraPagamentoRepository carteiraPagamentoRepository;
 
-    public CarteiraController(CartaoRepository cartaoRepository, CarteiraPagamentoRepository carteiraPagamentoRepository, ConsultarCartaoService consultarCartaoService) {
+    public CarteiraController(CartaoRepository cartaoRepository, Metrica metricas, CarteiraPagamentoRepository carteiraPagamentoRepository, ConsultarCartaoService consultarCartaoService) {
         this.cartaoRepository = cartaoRepository;
         this.carteiraPagamentoRepository = carteiraPagamentoRepository;
         this.consultarCartaoService = consultarCartaoService;
+        this.metricas = metricas;
     }
 
     @PostMapping("/cartoes/{id}")
@@ -47,6 +50,7 @@ public class CarteiraController {
             if(verificarAssociacaoCarteira(carteiraPagamentoResponse)){
                 CarteiraPagamento carteiraPagamento = carteiraPagamentoRequest.toModel(carteiraPagamentoResponse.getId(), cartaoBanco.get());
                 carteiraPagamentoRepository.save(carteiraPagamento);
+                metricas.incrementarCarteirasAssosciadas();
 
             }
         }catch(FeignException e){

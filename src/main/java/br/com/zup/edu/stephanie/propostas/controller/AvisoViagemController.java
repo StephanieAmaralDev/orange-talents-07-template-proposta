@@ -9,6 +9,7 @@ import br.com.zup.edu.stephanie.propostas.request.AvisoViagemRequest;
 import br.com.zup.edu.stephanie.propostas.request.ErrorFormatDTO;
 import br.com.zup.edu.stephanie.propostas.response.AvisoViagemResponse;
 import br.com.zup.edu.stephanie.propostas.service.ConsultarCartaoService;
+import br.com.zup.edu.stephanie.propostas.service.Metrica;
 import br.com.zup.edu.stephanie.propostas.validation.ApiErroException;
 import feign.FeignException;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,13 @@ public class AvisoViagemController {
     private final CartaoRepository cartaoRepository;
     private final ConsultarCartaoService consultarCartaoService;
     private final AvisoViagemRepository avisoViagemRepository;
+    private final Metrica metricas;
 
-    public AvisoViagemController(CartaoRepository cartaoRepository, ConsultarCartaoService consultarCartaoService, AvisoViagemRepository avisoViagemRepository) {
+    public AvisoViagemController(CartaoRepository cartaoRepository, Metrica metricas, ConsultarCartaoService consultarCartaoService, AvisoViagemRepository avisoViagemRepository) {
         this.cartaoRepository = cartaoRepository;
         this.consultarCartaoService = consultarCartaoService;
         this.avisoViagemRepository = avisoViagemRepository;
+        this.metricas = metricas;
     }
 
 
@@ -46,6 +49,7 @@ public class AvisoViagemController {
             if(verificarAvisoViagem(avisoViagemResponse)){
                 AvisoViagem avisoViagem = avisoViagemRequest.toModel(cartaoBanco.get(), request);
                 avisoViagemRepository.save(avisoViagem);
+                metricas.incrementarAvisosViagem();
 
             }
             else
